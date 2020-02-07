@@ -1,0 +1,39 @@
+.container-fluid {
+    text-align: center;
+    background-color: #1b3c65;
+}
+
+.container {
+    text-align: center;
+    background-color: #1b3c65;
+    border-radius: 50px 50px 50px 50px;  
+    padding: 30px;
+}
+
+.display-2 {
+    color: white;
+    outline: 10px;
+    outline-color: black;
+    padding: 10px;
+}
+
+body {
+    background-color: #3a67a7;
+}
+
+.pic-selection {
+    border-color: white;
+    border: 2px;
+}
+
+.draggable {
+    touch-action: none;
+    user-select: none;
+    width: 150px;
+    height: 150px;
+}
+
+.rabbit-droptarget {
+    width: 200px;
+    height: 500px;
+}

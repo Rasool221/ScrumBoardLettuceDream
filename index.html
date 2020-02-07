@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <link rel="stylesheet" href="style.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/interactjs/dist/interact.min.js"></script>
+
+        <title>Scrum</title>
+    </head>
+    <body>
+        <div class="container-fluid">
+            <h1 class="display-2">Scrum</h1>
+        </div>
+       
+        <div id="step-1" class="container">
+            <h1 class="display-4"> Step one </h1>
+            <div class="row" style="color: white; padding: 30px;">
+                <div class="col">
+                    <p>Rabbit</p>
+                    <div class="rabbit-droptarget"></div>
+                    <div class="draggable" style="background-color: red;"></div>
+                </div>
+                <div class="col">Snake</div>
+                <div class="col">Turtle</div>
+                <div class="col">Dog</div>
+                <div class="col">Cat</div>
+                <div class="col">Kangaroo</div>
+            </div>
+        </div>
+       
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    </body>
+    <script>
+        $(document).ready(function() {
+           
+        });
+
+        var position = {x:0, y:0};
+        
+        interact(".draggable").draggable({
+            listeners: {
+                start (event) {
+                    console.log(event.type, event.target);
+                },
+                move (event) {
+                    position.x += event.dx;
+                    position.y += event.dy;
+
+                    event.target.style.transform = `translate(${position.x}px, ${position.y}px)`;
+
+                },
+            }
+        })
+
+        interact(".rabbit-droptarget").dropzone({
+            ondrop: function (event) {
+                console.log(event.relatedTarget.id + ' was dropped into ' + event.target.id);
+            },
+            accept: ".drag0, .drag1"
+        }).on("dropactivate", function (event) {
+            event.target.classList.add("drop-activated");
+        })
+    </script>
+</html>
