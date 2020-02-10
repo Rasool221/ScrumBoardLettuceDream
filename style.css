@@ -33,7 +33,18 @@ body {
     height: 150px;
 }
 
-.rabbit-droptarget {
-    width: 200px;
-    height: 500px;
+.droptarget {
+    width: 120px;
+    height: 700px;   
+}
+
+.btn-primary {
+    background-color: #3a67a7;
+    border-color: #3a67a7;
+}
+
+.profilepic {
+    width: 110px;
+    height: 110px;
+    margin: 8px;
 }
