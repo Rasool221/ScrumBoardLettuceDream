@@ -33,9 +33,46 @@ body {
     height: 150px;
 }
 
-.droptarget {
+.rabbit-droptarget {
     width: 120px;
     height: 700px;   
+    border: 5px;
+    border-style: dotted;
+}
+
+.snake-droptarget {
+    width: 120px;
+    height: 700px;
+    border: 5px;
+    border-style: dotted;   
+}
+
+.turtle-droptarget {
+    width: 120px;
+    height: 700px;   
+    border: 5px;
+    border-style: dotted;
+}
+
+.dog-droptarget {
+    width: 120px;
+    height: 700px;   
+    border: 5px;
+    border-style: dotted;
+}
+
+.cat-droptarget {
+    width: 120px;
+    height: 700px;   
+    border: 5px;
+    border-style: dotted;
+}
+
+.kangaroo-droptarget {
+    width: 120px;
+    height: 700px;   
+    border: 5px;
+    border-style: dotted;
 }
 
 .btn-primary {

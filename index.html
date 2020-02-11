@@ -16,27 +16,32 @@
             <div class="row" style="color: white; padding: 30px;">
                 <div class="col">
                     <p>Rabbit</p>
-                    <div class="droptarget">
+                    <div class="rabbit-droptarget">
                     </div>
                 </div>
-                <div class="col">Snake
-                    <div class="droptarget">
+                <div class="col">
+                    <p>Snake</p>
+                    <div class="snake-droptarget">
                     </div>
                 </div>
-                <div class="col">Turtle
-                    <div class="droptarget">
+                <div class="col">
+                    <p>Turtle</p>
+                    <div class="turtle-droptarget">
                     </div>
                 </div>
-                <div class="col">Dog
-                    <div class="droptarget">
+                <div class="col">
+                    <p>Dog</p>
+                    <div class="dog-droptarget">
                     </div>
                 </div>
-                <div class="col">Cat
-                    <div class="droptarget">
+                <div class="col">
+                    <p>Cat</p>
+                    <div class="cat-droptarget">
                     </div>
                 </div>
-                <div class="col">Kangaroo
-                    <div class="droptarget">
+                <div class="col">
+                    <p>Kangaroo</p>
+                    <div class="kangaroo-droptarget">
                     </div>
                 </div>
             </div>
@@ -75,7 +80,7 @@
                     img.className = "profilepic";
                     img.src = the_url;
 
-                    $(".droptarget")[0].appendChild(img);
+                    $(".kangaroo-droptarget")[0].appendChild(img);
                     window.alert("Uploaded image successfuly");
 
                 }
@@ -89,10 +94,12 @@
                         pos.x += event.dx;
                         pos.y += event.dy;
                         event.target.style.transform = `translate(${pos.x}px, ${pos.y}px)`; 
+                        //console.log(event);
                     },
-                    onstart(event) {
-                        event.target.style.zIndex = parseInt(new Date().getTime() / 1000);
-                        console.log(event.target.style.zIndex);
+                    onend(event) {
+                        console.log(event);
+                        console.log(event.currentTarget.parentNode);
+                        console.log(event.target.parentNode);
                     }
                 })
             }
@@ -125,7 +132,52 @@
             }
         })
 
-        interact(".droptarget").dropzone({
+        interact(".rabbit-droptarget").dropzone({
+            ondrop: function (event) {
+                console.log(event.relatedTarget.id + ' was dropped into ' + event.target.id);
+            },
+            accept: ".drag0, .drag1"
+        }).on("dropactivate", function (event) {
+            event.target.classList.add("drop-activated");
+        })
+
+        interact(".snake-droptarget").dropzone({
+            ondrop: function (event) {
+                console.log(event.relatedTarget.id + ' was dropped into ' + event.target.id);
+            },
+            accept: ".drag0, .drag1"
+        }).on("dropactivate", function (event) {
+            event.target.classList.add("drop-activated");
+        })
+
+        interact(".turtle-droptarget").dropzone({
+            ondrop: function (event) {
+                console.log(event.relatedTarget.id + ' was dropped into ' + event.target.id);
+            },
+            accept: ".drag0, .drag1"
+        }).on("dropactivate", function (event) {
+            event.target.classList.add("drop-activated");
+        })
+
+        interact(".dog-droptarget").dropzone({
+            ondrop: function (event) {
+                console.log(event.relatedTarget.id + ' was dropped into ' + event.target.id);
+            },
+            accept: ".drag0, .drag1"
+        }).on("dropactivate", function (event) {
+            event.target.classList.add("drop-activated");
+        })
+
+        interact(".cat-droptarget").dropzone({
+            ondrop: function (event) {
+                console.log(event.relatedTarget.id + ' was dropped into ' + event.target.id);
+            },
+            accept: ".drag0, .drag1"
+        }).on("dropactivate", function (event) {
+            event.target.classList.add("drop-activated");
+        })
+
+        interact(".kangaroo-droptarget").dropzone({
             ondrop: function (event) {
                 console.log(event.relatedTarget.id + ' was dropped into ' + event.target.id);
             },
