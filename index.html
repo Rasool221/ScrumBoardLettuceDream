@@ -5,42 +5,47 @@
         <link rel="stylesheet" href="style.css">
         <script src="https://cdn.jsdelivr.net/npm/interactjs/dist/interact.min.js"></script>
 
-        <title>Scrum</title>
+        <title>Lettuce Dream - Scrum Board</title>
     </head>
     <body>
         <div class="container-fluid">
             <h1 class="display-2">Scrum</h1>
         </div>
+
         <div id="step-1" class="container">
-            <h1 class="display-4"> Step one </h1>
-            <div class="row" style="color: white; padding: 30px;">
+            <h1 class="display-4" style="color: white;"> Step 1 </h1>
+            <div id="removepicture" class="remove">
+                <img id="trash-can" class="can" src="can.png"></img> 
+            </div>
+        </br>
+            <div id="table" class="row" style="color: white; padding: 30px;">
                 <div class="col">
-                    <p>Rabbit</p>
+                    <img src="rabbit.png" class="animal-picture"></img>
                     <div class="rabbit-droptarget">
                     </div>
                 </div>
                 <div class="col">
-                    <p>Snake</p>
+                    <img src="snake.gif" class="animal-picture"></img>
                     <div class="snake-droptarget">
                     </div>
                 </div>
                 <div class="col">
-                    <p>Turtle</p>
+                    <img src="turtle.png" class="animal-picture"></img>
                     <div class="turtle-droptarget">
                     </div>
                 </div>
                 <div class="col">
-                    <p>Dog</p>
+                    <img src="dog.png" class="animal-picture"></img>
                     <div class="dog-droptarget">
                     </div>
                 </div>
                 <div class="col">
-                    <p>Cat</p>
+                    <img src="cat.png" class="animal-picture"></img>
                     <div class="cat-droptarget">
                     </div>
                 </div>
                 <div class="col">
-                    <p>Kangaroo</p>
+                    <img src="kangaroo.png" class="animal-picture"></img>
                     <div class="kangaroo-droptarget">
                     </div>
                 </div>
@@ -48,7 +53,7 @@
         </div>
 
         <div id="upload" class="container" style="padding: 20px; margin-top: 20px;">
-            <h1 class="display-4">Upload</h1>
+            <h1 class="display-4" style="color: white;"> Upload </h1>
             <div class="file-field" style="padding: 20px;">
                 <div class="btn btn-primary">
                   <input id="file-input" type="file">
@@ -66,7 +71,8 @@
         
         $("#uploadpic").click(function() {
             var f = $("#file-input")[0].files;    
-            
+            var counter = 0;
+
             for (var i = 0; i < f.length; i++) {
                 
 
@@ -76,35 +82,53 @@
                 reader.onload = function(event) {
                     var the_url = event.target.result;
 
-                    img.id = "pic";
+                    img.id = "pic"+counter;
                     img.className = "profilepic";
                     img.src = the_url;
 
                     $(".kangaroo-droptarget")[0].appendChild(img);
-                    window.alert("Uploaded image successfuly");
-
+                    //window.alert("Uploaded image successfuly");
+                    counter += 1;
                 }
                 
                 reader.readAsDataURL(f[0]);
                 
-                var pos = {x:0, y: 0};
-
-                interact(".profilepic").draggable({
-                    onmove(event) {
-                        pos.x += event.dx;
-                        pos.y += event.dy;
-                        event.target.style.transform = `translate(${pos.x}px, ${pos.y}px)`; 
-                        //console.log(event);
-                    },
-                    onend(event) {
-                        console.log(event);
-                        console.log(event.currentTarget.parentNode);
-                        console.log(event.target.parentNode);
-                    }
-                })
+                
             }
 
         });
+
+        var pos = {x:0, y: 0};
+
+        interact(".profilepic").draggable({
+            onmove(event) {
+                var target = event.target,
+                // keep the dragged position in the data-x/data-y attributes
+                x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
+                y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
+
+                // translate the element
+                target.style.webkitTransform = target.style.transform
+                                            = 'translate(' + x + 'px, ' + y + 'px)';
+                // update the posiion attributes
+                target.setAttribute('data-x', x);
+                target.setAttribute('data-y', y);
+
+                var table = $("#table")[0];
+                for (var i = 0; i < table.childElementCount; i++) {
+                    table.children[i].children[1].classList.add("drop-active");
+
+                }
+    
+            },
+            onend(event) {
+                var table = $("#table")[0];
+                for (var i = 0; i < table.childElementCount; i++) {
+                    table.children[i].children[1].classList.remove("drop-active");
+                    $("#trash-can")[0].classList.remove("remove-activate");
+                }
+            }
+        })
 
         $(document).ready(function() {
             
@@ -113,30 +137,42 @@
 
         var position = {x:0, y:0};
         
-        interact(".draggable").draggable({
-            listeners: {
-                start (event) {
-                    console.log(event.type, event.target);
-                },
-                move (event) {
-                    position.x += event.dx;
-                    position.y += event.dy;
+        function intersectRect (rectA, rectB) {
+         return !(
+            rectB.left >= rectA.right ||
+            rectB.right <= rectA.left ||
+            rectB.top >= rectA.bottom ||
+            rectB.bottom <= rectA.top
+            );
+        }
 
-                    event.target.style.transform = `translate(${position.x}px, ${position.y}px)`;
 
-                },
-                onstart(event) {
-                    event.target.style.zIndex = parseInt(new Date().getTime() / 1000);
-                    console.log(event.target.style.zIndex);
-                }
+        interact(".remove").dropzone({
+            ondrop: function (event) {
+                console.log(event.relatedTarget.id + ' was dropped into ' + event.target.id);
+                event.relatedTarget.remove();
+            },
+            ondragenter: function (event) {
+                event.target.children[0].classList.add("remove-activate");
+            },
+            ondragleave: function (event) {
+                event.target.classList.remove("remove-droptarget");
             }
+        }).on("dropactivate", function (event) {
+            event.target.classList.add("remove-activate");
         })
 
         interact(".rabbit-droptarget").dropzone({
             ondrop: function (event) {
                 console.log(event.relatedTarget.id + ' was dropped into ' + event.target.id);
+                event.target.classList.add("drop-target");
             },
-            accept: ".drag0, .drag1"
+            ondragenter: function (event) {
+                event.target.classList.add("drop-target");
+            },
+            ondragleave: function (event) {
+                event.target.classList.remove("drop-target");
+            }
         }).on("dropactivate", function (event) {
             event.target.classList.add("drop-activated");
         })
@@ -144,8 +180,14 @@
         interact(".snake-droptarget").dropzone({
             ondrop: function (event) {
                 console.log(event.relatedTarget.id + ' was dropped into ' + event.target.id);
+                event.target.classList.add("drop-target");
             },
-            accept: ".drag0, .drag1"
+            ondragenter: function (event) {
+                event.target.classList.add("drop-target");
+            },
+            ondragleave: function (event) {
+                event.target.classList.remove("drop-target");
+            }
         }).on("dropactivate", function (event) {
             event.target.classList.add("drop-activated");
         })
@@ -153,8 +195,14 @@
         interact(".turtle-droptarget").dropzone({
             ondrop: function (event) {
                 console.log(event.relatedTarget.id + ' was dropped into ' + event.target.id);
+                event.target.classList.add("drop-target");
             },
-            accept: ".drag0, .drag1"
+            ondragenter: function (event) {
+                event.target.classList.add("drop-target");
+            },
+            ondragleave: function (event) {
+                event.target.classList.remove("drop-target");
+            }
         }).on("dropactivate", function (event) {
             event.target.classList.add("drop-activated");
         })
@@ -162,8 +210,15 @@
         interact(".dog-droptarget").dropzone({
             ondrop: function (event) {
                 console.log(event.relatedTarget.id + ' was dropped into ' + event.target.id);
+                event.target.classList.add("drop-target");
             },
-            accept: ".drag0, .drag1"
+            ondragenter: function (event) {
+                event.target.classList.add("drop-target");
+
+            },
+            ondragleave: function (event) {
+                event.target.classList.remove("drop-target");
+            }
         }).on("dropactivate", function (event) {
             event.target.classList.add("drop-activated");
         })
@@ -171,8 +226,14 @@
         interact(".cat-droptarget").dropzone({
             ondrop: function (event) {
                 console.log(event.relatedTarget.id + ' was dropped into ' + event.target.id);
+                event.target.classList.add("drop-target");
             },
-            accept: ".drag0, .drag1"
+            ondragenter: function (event) {
+                event.target.classList.add("drop-target");
+            },
+            ondragleave: function (event) {
+                event.target.classList.remove("drop-target")
+            }
         }).on("dropactivate", function (event) {
             event.target.classList.add("drop-activated");
         })
@@ -180,8 +241,14 @@
         interact(".kangaroo-droptarget").dropzone({
             ondrop: function (event) {
                 console.log(event.relatedTarget.id + ' was dropped into ' + event.target.id);
+                event.target.classList.add("drop-target");
             },
-            accept: ".drag0, .drag1"
+            ondragenter: function (event) {
+                event.target.classList.add("drop-target");
+            },
+            ondragleave: function (event) {
+                event.target.classList.remove("drop-target");
+            }
         }).on("dropactivate", function (event) {
             event.target.classList.add("drop-activated");
         })
