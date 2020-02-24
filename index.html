@@ -23,9 +23,33 @@
                     <img src="rabbit.png" class="animal-picture"></img>
                     <div class="rabbit-droptarget">
                     </div>
+                    <div class="rabbit-droptarget">
+                    </div>
+                    <div class="rabbit-droptarget">
+                    </div>
+                    <div class="rabbit-droptarget">
+                    </div>
+                    <div class="rabbit-droptarget">
+                    </div>
+                    <div class="rabbit-droptarget">
+                    </div>
+                    <div class="rabbit-droptarget">
+                    </div>
                 </div>
                 <div class="col">
                     <img src="snake.gif" class="animal-picture"></img>
+                    <div class="snake-droptarget">
+                    </div>
+                    <div class="snake-droptarget">
+                    </div>
+                    <div class="snake-droptarget">
+                    </div>
+                    <div class="snake-droptarget">
+                    </div>
+                    <div class="snake-droptarget">
+                    </div>
+                    <div class="snake-droptarget">
+                    </div>
                     <div class="snake-droptarget">
                     </div>
                 </div>
@@ -33,9 +57,33 @@
                     <img src="turtle.png" class="animal-picture"></img>
                     <div class="turtle-droptarget">
                     </div>
+                    <div class="turtle-droptarget">
+                    </div>
+                    <div class="turtle-droptarget">
+                    </div>
+                    <div class="turtle-droptarget">
+                    </div>
+                    <div class="turtle-droptarget">
+                    </div>
+                    <div class="turtle-droptarget">
+                    </div>
+                    <div class="turtle-droptarget">
+                    </div>
                 </div>
                 <div class="col">
                     <img src="dog.png" class="animal-picture"></img>
+                    <div class="dog-droptarget">
+                    </div>
+                    <div class="dog-droptarget">
+                    </div>
+                    <div class="dog-droptarget">
+                    </div>
+                    <div class="dog-droptarget">
+                    </div>
+                    <div class="dog-droptarget">
+                    </div>
+                    <div class="dog-droptarget">
+                    </div>
                     <div class="dog-droptarget">
                     </div>
                 </div>
@@ -43,9 +91,33 @@
                     <img src="cat.png" class="animal-picture"></img>
                     <div class="cat-droptarget">
                     </div>
+                    <div class="cat-droptarget">
+                    </div>
+                    <div class="cat-droptarget">
+                    </div>
+                    <div class="cat-droptarget">
+                    </div>
+                    <div class="cat-droptarget">
+                    </div>
+                    <div class="cat-droptarget">
+                    </div>
+                    <div class="cat-droptarget">
+                    </div>
                 </div>
                 <div class="col">
                     <img src="kangaroo.png" class="animal-picture"></img>
+                    <div class="kangaroo-droptarget">
+                    </div>
+                    <div class="kangaroo-droptarget">
+                    </div>
+                    <div class="kangaroo-droptarget">
+                    </div>
+                    <div class="kangaroo-droptarget">
+                    </div>
+                    <div class="kangaroo-droptarget">
+                    </div>
+                    <div class="kangaroo-droptarget">
+                    </div>
                     <div class="kangaroo-droptarget">
                     </div>
                 </div>
@@ -99,9 +171,31 @@
         });
 
         var pos = {x:0, y: 0};
+        var startPos = null;
 
         interact(".profilepic").draggable({
+            snap: {
+              targets: [startPos],
+              range: Infinity,
+              relativePoints: [{x:0.5, y:0.5}],
+              endOnly: true  
+            },
+            onstart(event) {
+                var rect = interact.getElementRect(event.target);
+
+                startPos = {
+                    x: rect.left + rect.width  / 2,
+                    y: rect.top  + rect.height / 2
+                }
+
+                event.interactable.draggable({
+                    snap: {
+                        targets: [startPos]
+                    }
+                });
+            },
             onmove(event) {
+               
                 var target = event.target,
                 // keep the dragged position in the data-x/data-y attributes
                 x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
@@ -110,30 +204,31 @@
                 // translate the element
                 target.style.webkitTransform = target.style.transform
                                             = 'translate(' + x + 'px, ' + y + 'px)';
-                // update the posiion attributes
+                // update the position attributes
                 target.setAttribute('data-x', x);
                 target.setAttribute('data-y', y);
 
                 var table = $("#table")[0];
                 for (var i = 0; i < table.childElementCount; i++) {
-                    table.children[i].children[1].classList.add("drop-active");
-
+                    for (var b = 0; b < table.children[i].childElementCount; b++) {
+                        if (!table.children[i].children[b].className.includes("animal")) {
+                            table.children[i].children[b].classList.add("drop-active");
+                        }
+                    }
                 }
     
             },
             onend(event) {
                 var table = $("#table")[0];
                 for (var i = 0; i < table.childElementCount; i++) {
-                    table.children[i].children[1].classList.remove("drop-active");
-                    $("#trash-can")[0].classList.remove("remove-activate");
+                    for (var b = 0; b < table.children[i].childElementCount; b++) {
+                        if (!table.children[i].children[b].className.includes("animal")) {
+                            table.children[i].children[b].classList.remove("drop-active");
+                        }
+                    }
                 }
             }
         })
-
-        $(document).ready(function() {
-            
-            
-        });
 
         var position = {x:0, y:0};
         
@@ -151,15 +246,33 @@
             ondrop: function (event) {
                 console.log(event.relatedTarget.id + ' was dropped into ' + event.target.id);
                 event.relatedTarget.remove();
+
+                event.target.children[0].classList.remove("remove-activate");
             },
             ondragenter: function (event) {
                 event.target.children[0].classList.add("remove-activate");
+
+                var draggableElement = event.relatedTarget,
+                    dropzoneElement  = event.target,
+                    dropRect         = interact.getElementRect(dropzoneElement),
+                    dropCenter       = {
+                    x: dropRect.left + dropRect.width  / 2,
+                    y: dropRect.top  + dropRect.height / 2
+                };
+
+                event.draggable.draggable({
+                    snap : {
+                        targets: [dropCenter]
+                    }
+                })
+
             },
             ondragleave: function (event) {
                 event.target.classList.remove("remove-droptarget");
+                event.target.children[0].classList.remove("remove-activate");
             }
         }).on("dropactivate", function (event) {
-            event.target.classList.add("remove-activate");
+
         })
 
         interact(".rabbit-droptarget").dropzone({
@@ -169,6 +282,20 @@
             },
             ondragenter: function (event) {
                 event.target.classList.add("drop-target");
+
+                var draggableElement = event.relatedTarget,
+                    dropzoneElement  = event.target,
+                    dropRect         = interact.getElementRect(dropzoneElement),
+                    dropCenter       = {
+                    x: dropRect.left + dropRect.width  / 2,
+                    y: dropRect.top  + dropRect.height / 2
+                };
+
+                event.draggable.draggable({
+                    snap : {
+                        targets: [dropCenter]
+                    }
+                })
             },
             ondragleave: function (event) {
                 event.target.classList.remove("drop-target");
@@ -184,6 +311,20 @@
             },
             ondragenter: function (event) {
                 event.target.classList.add("drop-target");
+
+                var draggableElement = event.relatedTarget,
+                    dropzoneElement  = event.target,
+                    dropRect         = interact.getElementRect(dropzoneElement),
+                    dropCenter       = {
+                    x: dropRect.left + dropRect.width  / 2,
+                    y: dropRect.top  + dropRect.height / 2
+                };
+
+                event.draggable.draggable({
+                    snap : {
+                        targets: [dropCenter]
+                    }
+                })
             },
             ondragleave: function (event) {
                 event.target.classList.remove("drop-target");
@@ -199,6 +340,20 @@
             },
             ondragenter: function (event) {
                 event.target.classList.add("drop-target");
+
+                var draggableElement = event.relatedTarget,
+                    dropzoneElement  = event.target,
+                    dropRect         = interact.getElementRect(dropzoneElement),
+                    dropCenter       = {
+                    x: dropRect.left + dropRect.width  / 2,
+                    y: dropRect.top  + dropRect.height / 2
+                };
+
+                event.draggable.draggable({
+                    snap : {
+                        targets: [dropCenter]
+                    }
+                })
             },
             ondragleave: function (event) {
                 event.target.classList.remove("drop-target");
@@ -215,6 +370,20 @@
             ondragenter: function (event) {
                 event.target.classList.add("drop-target");
 
+                var draggableElement = event.relatedTarget,
+                    dropzoneElement  = event.target,
+                    dropRect         = interact.getElementRect(dropzoneElement),
+                    dropCenter       = {
+                    x: dropRect.left + dropRect.width  / 2,
+                    y: dropRect.top  + dropRect.height / 2
+                };
+
+                event.draggable.draggable({
+                    snap : {
+                        targets: [dropCenter]
+                    }
+                })
+
             },
             ondragleave: function (event) {
                 event.target.classList.remove("drop-target");
@@ -230,6 +399,20 @@
             },
             ondragenter: function (event) {
                 event.target.classList.add("drop-target");
+
+                var draggableElement = event.relatedTarget,
+                    dropzoneElement  = event.target,
+                    dropRect         = interact.getElementRect(dropzoneElement),
+                    dropCenter       = {
+                    x: dropRect.left + dropRect.width  / 2,
+                    y: dropRect.top  + dropRect.height / 2
+                };
+
+                event.draggable.draggable({
+                    snap : {
+                        targets: [dropCenter]
+                    }
+                })
             },
             ondragleave: function (event) {
                 event.target.classList.remove("drop-target")
@@ -245,6 +428,20 @@
             },
             ondragenter: function (event) {
                 event.target.classList.add("drop-target");
+
+                var draggableElement = event.relatedTarget,
+                    dropzoneElement  = event.target,
+                    dropRect         = interact.getElementRect(dropzoneElement),
+                    dropCenter       = {
+                    x: dropRect.left + dropRect.width  / 2,
+                    y: dropRect.top  + dropRect.height / 2
+                };
+
+                event.draggable.draggable({
+                    snap : {
+                        targets: [dropCenter]
+                    }
+                })
             },
             ondragleave: function (event) {
                 event.target.classList.remove("drop-target");
