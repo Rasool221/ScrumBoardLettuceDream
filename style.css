@@ -3,6 +3,10 @@
     background-color: #1b3c65;
 }
 
+.col {
+    padding: 10px;
+}
+
 .container {
     text-align: center;
     background-color: #1b3c65;
@@ -145,3 +149,32 @@ body {
 .remove-activate {
     background-color: red;
 }
+
+.vertical {
+    border-left: 2px dashed;
+    height: 1110px;
+    color: #aaa;
+}
+
+.groundhog-droptarget {
+    width: 110px;
+    height: 110px;
+    border: dashed 4px transparent;
+    border-radius: 4px;
+    margin: 10px auto 30px;
+    padding: 10px;
+    transition: background-color 0.5s;
+    transition: border-color 0.5s; 
+}
+
+.hen-droptarget {
+    width: 110px;
+    height: 110px;
+    border: dashed 4px transparent;
+    border-radius: 4px;
+    margin: 10px auto 30px;
+    padding: 10px;
+    transition: background-color 0.5s;
+    transition: border-color 0.5s; 
+}
+
